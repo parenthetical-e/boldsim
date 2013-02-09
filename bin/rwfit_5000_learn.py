@@ -1,5 +1,7 @@
 """ A top-level experimental script that run 5000 iterations of 
-the RW() done *in parallel* on ncores. Learning mode is on. 
+the RW() done *in parallel* on ncores. 
+
+Learning mode is on. 
 
 Note: See code to set parameters.  This script takes no arguments. """
 import os
@@ -31,10 +33,10 @@ def main(names, model_conf, TR, ISI):
 if __name__ == "__main__":
     TR = 2
     ISI = 2
-    nrun = 100
-    model_conf = "rw_noorth.ini"
+    nrun = 5000
+    model_conf = "rw.ini"
     
-    ncore = 2
+    ncore = 10
     
     # Create ./data if needed
     basedir = "data"
@@ -56,7 +58,7 @@ if __name__ == "__main__":
     results = reduce_chunks(results_in_chunks)
     
     print("Writing results to disk.")
-    results_name = "rwfit5000L{0}".format(nrun)
+    results_name = "rwfit_{0}_learn".format(nrun)
     hdfpath = os.path.join("data", results_name+".hdf5")
     write_hdf(results, hdfpath)
     
