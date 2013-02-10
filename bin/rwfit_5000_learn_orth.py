@@ -4,6 +4,7 @@ the RW() done *in parallel* on ncores.
 Learning mode is on. 
 Parametric orthogonalization is on.
 
+Note: model (.ini) files must be in the PWD for this script to run correctly.
 Note: See code to set parameters.  This script takes no arguments. """
 import os
 import functools
