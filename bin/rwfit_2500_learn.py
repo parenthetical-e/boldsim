@@ -34,7 +34,7 @@ def main(names, model_conf, TR, ISI):
 if __name__ == "__main__":
     TR = 2
     ISI = 2
-    nrun = 5000
+    nrun = 2500
     model_conf = "rw.ini"
     
     ncore = 10
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     pmain = functools.partial(main, model_conf=model_conf, TR=TR, ISI=ISI)
     results_in_chunks = pool.map(pmain, run_chunks)
     results = reduce_chunks(results_in_chunks)
-    
+    print(len(results)) 
     print("Writing results to disk.")
     results_name = "rwfit_{0}_learn".format(nrun)
     hdfpath = os.path.join("data", results_name+".hdf5")
