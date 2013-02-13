@@ -1,5 +1,3 @@
-# TODO create a class to compare to models for two alpha values
-
 """ Model-based Exp classes used 'A precise problem with model-based fMRI.' """
 import numpy as np
 import rl
