@@ -3,7 +3,7 @@ the RW example (see simfMRI.exp_examples.RW()). """
 import functools
 from simfMRI.analysis.plot import hist_t_all_models
 from simfMRI.runclass import Run
-from boldsim.expclass import RWfit
+from boldsim.expclass.rwfit import RWfit
 
 
 class RunRWFit(Run):

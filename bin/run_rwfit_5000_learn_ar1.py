@@ -3,10 +3,10 @@ the RW example (see simfMRI.exp_examples.RW()). """
 import functools
 from simfMRI.analysis.plot import hist_t_all_models
 from simfMRI.runclass import Run
-from boldsim.expclass.rwfit import RWfit
+from boldsim.expclass.rwfit import RWAR1
 
 
-class RunRWFit(Run):
+class RunRWAR1(Run):
     """ An example of a 100 iteration RW experimental Run(). """
     
     def __init__(self):
@@ -18,7 +18,7 @@ class RunRWFit(Run):
         # ----
         # An instance of simfMRI.examples.* Class (or similar) 
         # should go here.
-        self.BaseClass = functools.partial(RWfit, behave="random")  
+        self.BaseClass = functools.partial(RWAR1, behave="learn")  
             ## Nornalize the signature of BaseClass with 
             ## functools.partial
             ## Expects:
@@ -44,12 +44,12 @@ class RunRWFit(Run):
 
 
 if __name__ == "__main__":
-    sim = RunRWFit()
+    sim = RunRWAR1()
     sim.go(parallel=True)
         ## Results get stored internally.
 
     # Writing the results to a hdf5    
-    results_name = "rw_{0}_random".format(sim.nrun)
+    results_name = "rw_{0}_learn_ar1".format(sim.nrun)
     sim.save_results(results_name)
 
     # And plot all the models 

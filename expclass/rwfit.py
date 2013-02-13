@@ -1,13 +1,16 @@
+# TODO create a class to compare to models for two alpha values
+
 """ Model-based Exp classes used 'A precise problem with model-based fMRI.' """
 import numpy as np
 import rl
 import simfMRI
 import simBehave
-from simfMRI.expclass import Exp
+from functools import partial
 from simBehave.trials import event_random
+from simfMRI.expclass import Exp
 from simfMRI.misc import process_prng
+from simfMRI.noise import ar1, physio, shift
 
-# TODO create a class to compare to models for two alpha values
 
 class RWfit(Exp):
     """
@@ -56,3 +59,38 @@ class RWfit(Exp):
         self.data['rpe'] = rpes
         self.data['rand'] = self.prng.rand(len(self.trials))
 
+
+class RWAR1(RWfit):
+    """ A RWfit subclass, using a simfMRI.noise.ar1 noise model. """
+    
+    def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
+        try: 
+            RWfit.__init__(self,behave="learn", TR=2, ISI=2, prng=None)
+        except AttributeError: 
+            pass
+        
+        self.noise_f = partial(ar1, alpha=0.2)
+
+
+class RWPhysio(RWfit):
+    """ A RWfit subclass, using a simfMRI.noise.physio noise model. """
+    
+    def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
+        try: 
+            RWfit.__init__(self,behave="learn", TR=2, ISI=2, prng=None)
+        except AttributeError: 
+            pass
+        
+        self.noise_f = partial(physio, 
+                TR=self.TR, sigma=1, freq_heart=1.17, freq_resp=0.2)
+                ## Use partial so noise_f has the epxected signature
+                ## noise_f(N, prng)
+                
+
+class RWhrf(RWfit):
+    """ A RWfit subclass, where a single parameter for the HRF model
+    (for the BOLD signal) is randomly perturbed with 5% of its canonical
+    value (sampled from a uniform distribution). """
+    
+    pass
+    
