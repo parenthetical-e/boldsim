@@ -49,7 +49,7 @@ if __name__ == "__main__":
         ## Results get stored internally.
 
     # Writing the results to a hdf5    
-    results_name = "rw{0}".format(sim.nrun)
+    results_name = "rw_{0}_learn".format(sim.nrun)
     sim.save_results(results_name)
 
     # And plot all the models 

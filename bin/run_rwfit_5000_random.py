@@ -18,7 +18,7 @@ class RunRWFit(Run):
         # ----
         # An instance of simfMRI.examples.* Class (or similar) 
         # should go here.
-        self.BaseClass = functools.partial(RWfit, behave="learn")  
+        self.BaseClass = functools.partial(RWfit, behave="random")  
             ## Nornalize the signature of BaseClass with 
             ## functools.partial
             ## Expects:
@@ -26,7 +26,7 @@ class RunRWFit(Run):
         
         # ----
         # User Globals
-        self.nrun = 500
+        self.nrun = 5000
         self.TR = 2
         self.ISI = 2
         self.model_conf = "rw.ini"
@@ -35,7 +35,7 @@ class RunRWFit(Run):
         
         # --
         # Optional Globals
-        self.ncore = 2
+        self.ncore = 10
     
         # ----
         # Misc
@@ -49,7 +49,7 @@ if __name__ == "__main__":
         ## Results get stored internally.
 
     # Writing the results to a hdf5    
-    results_name = "rw_{0}_learn".format(sim.nrun)
+    results_name = "rw_{0}_random".format(sim.nrun)
     sim.save_results(results_name)
 
     # And plot all the models 

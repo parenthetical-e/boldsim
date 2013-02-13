@@ -26,16 +26,16 @@ class RunRWFit(Run):
         
         # ----
         # User Globals
-        self.nrun = 500
+        self.nrun = 5000
         self.TR = 2
         self.ISI = 2
-        self.model_conf = "rw.ini"
+        self.model_conf = "rw_orth.ini"
         self.savedir = "data"
         self.ntrial = 60
         
         # --
         # Optional Globals
-        self.ncore = 2
+        self.ncore = 10
     
         # ----
         # Misc
@@ -49,7 +49,7 @@ if __name__ == "__main__":
         ## Results get stored internally.
 
     # Writing the results to a hdf5    
-    results_name = "rw_{0}_learn".format(sim.nrun)
+    results_name = "rw_{0}_learn_orth".format(sim.nrun)
     sim.save_results(results_name)
 
     # And plot all the models 
