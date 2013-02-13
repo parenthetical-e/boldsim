@@ -65,11 +65,13 @@ class RWAR1(RWfit):
     
     def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
         try: 
-            RWfit.__init__(self,behave="learn", TR=2, ISI=2, prng=None)
+            RWfit.__init__(self, n, behave="learn", TR=2, ISI=2, prng=None)
         except AttributeError: 
             pass
         
         self.noise_f = partial(ar1, alpha=0.2)
+            ## Use partial so noise_f has the epxected signature
+            ## noise_f(N, prng)
 
 
 class RWPhysio(RWfit):
@@ -77,7 +79,7 @@ class RWPhysio(RWfit):
     
     def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
         try: 
-            RWfit.__init__(self,behave="learn", TR=2, ISI=2, prng=None)
+            RWfit.__init__(self,n, behave="learn", TR=2, ISI=2, prng=None)
         except AttributeError: 
             pass
         
