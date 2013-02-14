@@ -72,6 +72,34 @@ class RWAR1(RWfit):
             ## noise_f(N, prng)
 
 
+class RWAR1a04(RWfit):
+    """ A RWfit subclass, using a simfMRI.noise.ar1 noise model. """
+    
+    def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
+        try: 
+            RWfit.__init__(self, n, behave="learn", TR=2, ISI=2, prng=None)
+        except AttributeError: 
+            pass
+        
+        self.noise_f = partial(ar1, alpha=0.4)
+            ## Use partial so noise_f has the epxected signature
+            ## noise_f(N, prng)
+
+
+class RWAR1a08(RWfit):
+    """ A RWfit subclass, using a simfMRI.noise.ar1 noise model. """
+    
+    def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
+        try: 
+            RWfit.__init__(self, n, behave="learn", TR=2, ISI=2, prng=None)
+        except AttributeError: 
+            pass
+        
+        self.noise_f = partial(ar1, alpha=0.8)
+            ## Use partial so noise_f has the epxected signature
+            ## noise_f(N, prng)
+
+
 class RWPhysio(RWfit):
     """ A RWfit subclass, using a simfMRI.noise.physio noise model. """
     
