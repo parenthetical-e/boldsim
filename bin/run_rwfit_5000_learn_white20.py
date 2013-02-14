@@ -3,10 +3,10 @@ the RW example (see simfMRI.exp_examples.RW()). """
 import functools
 from simfMRI.analysis.plot import hist_t_all_models
 from simfMRI.runclass import Run
-from boldsim.expclass.rwalpha import RWalpha
+from boldsim.expclass.rwfit import RWwhite20
 
 
-class RunRWAlpha(Run):
+class RunRWwhite20(Run):
     """ An example of a 100 iteration RW experimental Run(). """
     
     def __init__(self):
@@ -18,18 +18,18 @@ class RunRWAlpha(Run):
         # ----
         # An instance of simfMRI.examples.* Class (or similar) 
         # should go here.
-        self.BaseClass = functools.partial(RWalpha, alphas=[0.1, 0.9])  
-            ## Nornalize the signature of BaseClass with
+        self.BaseClass = functools.partial(RWwhite20, behave="learn")  
+            ## Nornalize the signature of BaseClass with 
             ## functools.partial
             ## Expects:
             ## BaseClass(self.ntrial, TR=self.TR, ISI=self.ISI, prng=prng)
         
         # ----
         # User Globals
-        self.nrun = 10
+        self.nrun = 5000
         self.TR = 2
         self.ISI = 2
-        self.model_conf = "rw_2alpha.ini"
+        self.model_conf = "rw.ini"
         self.savedir = "data"
         self.ntrial = 60
         
@@ -44,12 +44,12 @@ class RunRWAlpha(Run):
 
 
 if __name__ == "__main__":
-    sim = RunRWAlpha()
+    sim = RunRWwhite20()
     sim.go(parallel=True)
         ## Results get stored internally.
 
     # Writing the results to a hdf5    
-    results_name = "rw_{0}_learn_2alpha".format(sim.nrun)
+    results_name = "rw_{0}_learn_white20".format(sim.nrun)
     sim.save_results(results_name)
 
     # And plot all the models 

@@ -7,7 +7,7 @@ from functools import partial
 from simBehave.trials import event_random
 from simfMRI.expclass import Exp
 from simfMRI.misc import process_prng
-from simfMRI.noise import ar1, physio, shift
+from simfMRI.noise import ar1, physio, shift, white
 
 
 class RWfit(Exp):
@@ -86,6 +86,36 @@ class RWPhysio(RWfit):
                 ## Use partial so noise_f has the epxected signature
                 ## noise_f(N, prng)
                 
+
+class RWwhite05(RWfit):
+    """ A RWfit subclass, using a simfMRI.noise.white noise model, using a
+    variance of 0.5. """
+    
+    def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
+        try: 
+            RWfit.__init__(self,n, behave="learn", TR=2, ISI=2, prng=None)
+        except AttributeError: 
+            pass
+    
+        self.noise_f = partial(white, sigma=0.5)
+                ## Use partial so noise_f has the epxected signature
+                ## noise_f(N, prng)
+
+
+class RWwhite20(RWfit):
+    """ A RWfit subclass, using a simfMRI.noise.white noise model, using a
+    variance of 2. """
+    
+    def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
+        try: 
+            RWfit.__init__(self,n, behave="learn", TR=2, ISI=2, prng=None)
+        except AttributeError: 
+            pass
+    
+        self.noise_f = partial(white, sigma=2)
+                ## Use partial so noise_f has the epxected signature
+                ## noise_f(N, prng)
+
 
 class RWhrf(RWfit):
     """ A RWfit subclass, where a single parameter for the HRF model
