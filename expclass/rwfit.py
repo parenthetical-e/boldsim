@@ -59,7 +59,8 @@ class RWfit(Exp):
 
 
 class RWAR1(RWfit):
-    """ A RWfit subclass, using a simfMRI.noise.ar1 noise model. """
+    """ A RWfit subclass, using a simfMRI.noise.ar1 noise model an
+    autocorr of 0.2. """
     
     def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
         try: 
@@ -73,7 +74,8 @@ class RWAR1(RWfit):
 
 
 class RWAR1a04(RWfit):
-    """ A RWfit subclass, using a simfMRI.noise.ar1 noise model. """
+    """ A RWfit subclass, using a simfMRI.noise.ar1 noise model an
+    autocorr of 0.4. """
     
     def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
         try: 
@@ -87,7 +89,8 @@ class RWAR1a04(RWfit):
 
 
 class RWAR1a08(RWfit):
-    """ A RWfit subclass, using a simfMRI.noise.ar1 noise model. """
+    """ A RWfit subclass, using a simfMRI.noise.ar1 noise model with an
+    autocorr of 0.8. """
     
     def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
         try: 
@@ -139,8 +142,22 @@ class RWwhite20(RWfit):
             RWfit.__init__(self,n, behave="learn", TR=2, ISI=2, prng=None)
         except AttributeError: 
             pass
-    
+        
         self.noise_f = partial(white, sigma=2)
+                ## Use partial so noise_f has the epxected signature
+                ## noise_f(N, prng)
+
+
+class RWlowfreq(RWfit):
+    """ A RWfit subclass, using a simfMRI.noise.lowfreqdrift noise model. """
+    
+    def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
+        try: 
+            RWfit.__init__(self,n, behave="learn", TR=2, ISI=2, prng=None)
+        except AttributeError: 
+            pass
+            
+        self.noise_f = partial(lowfreqdrift, TR=2)
                 ## Use partial so noise_f has the epxected signature
                 ## noise_f(N, prng)
 
