@@ -8,6 +8,7 @@ from simBehave.trials import event_random
 from simfMRI.expclass import Exp
 from simfMRI.misc import process_prng
 from simfMRI.noise import ar1, physio, shift, white
+from simfMRI.hrf import preturb_canonical
 
 
 class RWfit(Exp):
@@ -159,7 +160,7 @@ class RWlowfreq(RWfit):
             
         self.noise_f = partial(lowfreqdrift, TR=2)
                 ## Use partial so noise_f has the epxected signature
-                ## noise_f(N, prng)
+                ## e_f(N, prng)
 
 
 class RWhrf(RWfit):
@@ -167,5 +168,13 @@ class RWhrf(RWfit):
     (for the BOLD signal) is randomly perturbed with 5% of its canonical
     value (sampled from a uniform distribution). """
     
-    pass
-    
+    def __init__(self, n, behave='learn', TR=2, ISI=2, prng=None):
+        try: 
+            RWfit.__init__(self,n, behave="learn", TR=2, ISI=2, prng=None)
+        except AttributeError: 
+            pass
+            
+        self.params, self.prng = preturb_canonical(
+                0.10, width=32, TR=self.TR, prng=self.prng)
+                    ## 0.10 is 10%
+

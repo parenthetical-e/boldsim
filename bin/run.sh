@@ -1,6 +1,8 @@
-# Run (nearly) all the run_* files in ./boldsim/bin/*
-basedir=/Users/type/Code
-echo $basdir > run.log
+# Run all the run_rw* files in ./boldsim/bin/*
+date > run.log
+
+basedir=/home/epete/src
+echo $basdir >> run.log
 for f in $basedir/boldsim/bin/run_rw*
 	do
 		python $f 
@@ -8,3 +10,6 @@ for f in $basedir/boldsim/bin/run_rw*
 	done
 
 echo "Done." >> run.log
+
+date >> run.log
+
