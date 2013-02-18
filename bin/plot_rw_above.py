@@ -7,7 +7,7 @@ import sys
 import numpy as np
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
-from simfMRI.io import read_hdf, get_model_names
+from simfMRI.io import read_hdf, get_model_names, get_model_meta
 from simfMRI.analysis.stat import create_hist_list
 
 def main(posargs):
@@ -53,8 +53,11 @@ def main(posargs):
         # Pretty things up then save 
         # this barplot to the pdf
         # and move onto the next model
+        meta = get_model_meta(hdf, model)
+        
         plt.ylim(ymin=0, ymax=1)
-        plt.title("{0}: percent area above {1}".format(model, criterion))
+        plt.title("Area above {3}, {0} - BOLD: {1}, DM: {2}".format(
+            model, meta["bold"], meta["dm"], criterion))
         plt.savefig(pdf, format="pdf")
     
     pdf.close()
