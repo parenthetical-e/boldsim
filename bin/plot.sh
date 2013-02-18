@@ -1,6 +1,5 @@
 # Things to make plots for...
 # This will eventually make a lot of plots
-# [bar] For each set, model, stat, make a plot above criterion
 
 # [bar] For average (w/se) comparing to white=1, for each model, stat:
 # 	set1: ar, ar4, ar8

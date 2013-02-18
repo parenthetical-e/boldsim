@@ -1,6 +1,6 @@
-""" A top-level script that takes produces (many) bar plots of area above criterion for every condition for every model in the provided simFMRI dataset.
+""" A top-level script that produces (many) bar plots of area above criterion for every condition for every model in the provided simFMRI dataset.
 
-Usage: plot_rw_above [nooptions] hdf stat criterion name
+Usage: plot_rw_above [nooptions] hdf stat criterion plotname
 """
 import os
 import sys
