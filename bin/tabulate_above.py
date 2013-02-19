@@ -1,6 +1,9 @@
-""" TODO
+""" For every model in the provided hdf file, and for the selected stat and 
+criterion, tabulate the AUC (area under the curve) at or above criterion for 
+each condition in each model.  Save the result to a csv table named tablename 
+(.csv is added automatically).
 
-Usage: plot_rw_above [nooptions] hdf stat criterion plotname
+Usage: python plot_rw_above hdf stat criterion tablename
 """
 import os
 import sys
@@ -8,6 +11,7 @@ import csv
 import numpy as np
 from simfMRI.io import read_hdf, get_model_names, get_model_meta
 from simfMRI.analysis.stat import create_hist_list
+
 
 def main(posargs):
 
