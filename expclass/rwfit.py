@@ -7,7 +7,7 @@ from functools import partial
 from simBehave.trials import event_random
 from simfMRI.expclass import Exp
 from simfMRI.misc import process_prng
-from simfMRI.noise import ar1, physio, shift, white
+from simfMRI.noise import ar1, physio, shift, white, lowfreqdrift
 from simfMRI.hrf import preturb_canonical
 
 
