@@ -50,7 +50,7 @@ echo "lowfreq" >> tabulate1.log
 python $BASEDIR/boldsim/bin/tabulate_compare.py t $DATADIR/rw_5000_learn.hdf5 $DATADIR/rw_5000_learn_lowfreq.hdf5 lowfreq
 
 echo "white" >> tabulate1.log
-python $BASEDIR/boldsim/bin/tabulate_compare.py t $DATADIR/rw_5000_learn.hdf5 $DATADIR/rw_5000_learn_white05.hdf5 white $DATADIR/rw_5000_learn_white20.hdf5 white
+python $BASEDIR/boldsim/bin/tabulate_compare.py t $DATADIR/rw_5000_learn.hdf5 white $DATADIR/rw_5000_learn_white20.hdf5 white
 
 # The end
 date >> tabulate1.log

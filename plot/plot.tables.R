@@ -1,6 +1,6 @@
 require("ggplot2")
 
-plot.above <- function(csv, name, width, height){
+plot.above <- function(csv, name, width=8, height=8){
 
 	dt <- read.table(csv, sep=",", header=TRUE)
 	

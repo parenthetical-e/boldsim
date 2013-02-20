@@ -10,7 +10,7 @@
 
 * And take no arguments.  While more general run files (that take arguments) could have been created, I felt it was best that experimental files were as explicit as possible.  This comes with a code-duplication cost, but that seems worth it for the gained transparency.  As least I hope.
 
-* Much of the experiments here were initially done about a year and a half ago.  But as I have greatly alterated/improved of the simfMRI code base, so the experimental runs are redone completely.  
+* Much of the experiments here were initially done about a year and a half ago.  But as I have greatly altered/improved of the simfMRI code base, so the experimental runs are redone completely.  
 
  - To see the old experiments and code go back through the simfMRI git repository.
 
@@ -47,8 +47,8 @@
 
  - Though they were not run individually.  See run1.sh, which will fully reproduce the run1 datasets.  Run 1 data used in the paper matches the following commit #s
 
-		boldsim: 
-		simfMRI: 
+		boldsim: 941a78533430c2b037087b5a19fc34de37ce459b
+		simfMRI: 0622b477b7193051a45ac0f89ab83a32db56d29a
 
  - NOTE: a ./data directory will be created whereever you run run1.sh from and the data will live there
  - NOTE: run1.sh requires that the following files (from boldsim) are present in it's working directory.
@@ -60,4 +60,49 @@
 * There is a third set still to do - assessing robustness to design matrix or BOLD mis-specification.  This will e run2, along with any other reruns, and whatever else.
 
 * Several tabulations were carried out on the run1 data.  To see/rerun these tabulations see tabulate1.sh
+
+* A bit of file cleanup:
+ - hdf5 data was left in ./data
+ - pdfs were moved to ./plot; all plots will live here now.
+ - tabulate1.sh results were moved to ./table
+
+----
+ 
+* The white noise tabulation should not include the reduced noise condition (white05), so it was rerun (from ./data) as below.  I updated the tabulate1.sh file to reflect this change.
+		
+		python ~/src/boldsim/bin/tabulate_compare.py t rw_5000_learn.hdf5 \
+		rw_5000_learn_white20.hdf5 white
+
+----
+
+* Made the following plots (in R version 2.15.1, using ggplot2 version 0.9.2.1, MacOS 10.7.4)
+ - boldsim commit: 941a78533430c2b037087b5a19fc34de37ce459b
+
+		plot.compare("table/white_t.csv", "./plot/c_white", c(2.681,4.317))
+		plot.compare("table/lowfreq_t.csv", "./plot/c_lowfreq", c(2.681,4.317))
+		plot.compare("table/physio_t.csv", "./plot/c_physio", c(2.681,4.317))
+		plot.compare("table/ar1_t.csv", "./plot/c_ar1",c(2.681,4.317))
+		
+		plot.above("./table/rw_5000_learn_t4.317.csv", "plot/above_learn_t4.317", 8, 8)
+		plot.above("./table/rw_5000_learn_t2.681.csv", "plot/above_learn_t2.681", 8, 8)
+		
+		plot.above("./table/rw_5000_learn_2alpha_t4.317.csv", "plot/2alpha_t4.317", 8, 8)
+		plot.above("./table/rw_5000_learn_2alpha_t2.681.csv", "plot/2alpha_t2.681", 8, 8)
+		
+		plot.above("table/rw_5000_learn_orth_t4.317.csv", "plot/orth_t4.317", 8, 8)
+		plot.above("table/rw_5000_learn_orth_t2.681.csv", "plot/orth_t2.681", 8, 8)
+		
+----
+
+* Want to compare to parametric models without a boxcar regressor, as all the above have. Created the below to that end.  Note, this simulation will be auto-run when calling run1.sh (so there is no need for run2.sh)
+
+		boldsim/bin/rw_nobox.ini
+		boldsim/bin/run_rwfit_5000_learn_nobox.py
+		
+* To process the results of the nobox simulation I created tabulate2.sh. Then plotted the results with
+
+		plot.above("table/rw_5000_learn_nobox_t4.317.csv", "plot/nobox_t4.317", 8, 8)
+		plot.above("table/rw_5000_learn_nobox_t2.681.csv", "plot/nobox_t2.681", 8, 8)
+
+
 
