@@ -75,9 +75,9 @@
 
 ----
 
-* Made the following plots (in R version 2.15.1, using ggplot2 version 0.9.2.1, MacOS 10.7.4)
- - boldsim commit: 941a78533430c2b037087b5a19fc34de37ce459b
+* Made the following plots (in R version 2.15.1, using ggplot2 version 0.9.2.1, CentOS 5.7 (code (mostly) tested on MacOS 10.7.5, using R 9.3.4)).
 
+		boldsim commit: 941a78533430c2b037087b5a19fc34de37ce459b
 		plot.compare("table/white_t.csv", "./plot/c_white", c(2.681,4.317))
 		plot.compare("table/lowfreq_t.csv", "./plot/c_lowfreq", c(2.681,4.317))
 		plot.compare("table/physio_t.csv", "./plot/c_physio", c(2.681,4.317))
@@ -96,13 +96,13 @@
 
 * Want to compare to parametric models without a boxcar regressor, as all the above have. Created the below to that end.  Note, this simulation will be auto-run when calling run1.sh (so there is no need for run2.sh)
 
+		boldsim commit: 459db86e536b4284fc4e30e0e3a0e252d31838a0
 		boldsim/bin/rw_nobox.ini
 		boldsim/bin/run_rwfit_5000_learn_nobox.py
 		
-* To process the results of the nobox simulation I created tabulate2.sh. Then plotted the results with
+* To process the results of the nobox simulation I created tabulate2.sh. Then moved the created csvs to ./table and plotted these results:
 
-		plot.above("table/rw_5000_learn_nobox_t4.317.csv", "plot/nobox_t4.317", 8, 8)
-		plot.above("table/rw_5000_learn_nobox_t2.681.csv", "plot/nobox_t2.681", 8, 8)
-
-
+		boldsim commit: 459db86e536b4284fc4e30e0e3a0e252d31838a0
+		plot.above("table/rw_5000_learn_nobox_t4.317.csv", "plot/above_nobox_t4.317", 8, 8)
+		plot.above("table/rw_5000_learn_nobox_t2.681.csv", "plot/above_nobox_t2.681", 8, 8)
 
