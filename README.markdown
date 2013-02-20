@@ -1,5 +1,7 @@
 # Experimental log
 
+* NOTE: all experimental run files below assume there are 12 cores available to spread the simulations over.  Adjust 'ncore' (to an even number) in each run file to suit your local environment.  More cores will be faster, though the bottleneck may become the write and plotting times, or for very high core counts python process spawning may instead become rate limiting.  I'd stay below ncore is 50, or so.  Running these on just 2 cores will take about 4 days (loosely speaking).
+ 
 * Branched off so specific experimental runs are no longer part of the simfMRI code base, creating this repository.  As much as is possible all experiment specific files for 'A precise problem with model-based fMRI' will live here.
 
 * The plan is to use my simfMRI framework to create top-level experimental runs (i.e. scripts run from the command line).  These top-level scripts are the experiments.  They all are named like:
@@ -43,11 +45,19 @@
 	 run_rwfit_5000_learn_white05.py
 	 run_rwfit_5000_learn_white20.py
 
- - Though they were not run individually.  See run1.sh, which will fully reproduce the run1 datasets.  Run 1 data used in the paper matches the following commit #s for boldsim and simfMRI projects respectively
- 
-	 TODO commit #s
- 
+ - Though they were not run individually.  See run1.sh, which will fully reproduce the run1 datasets.  Run 1 data used in the paper matches the following commit #s
+
+		boldsim: 
+		simfMRI: 
+
+ - NOTE: a ./data directory will be created whereever you run run1.sh from and the data will live there
+ - NOTE: run1.sh requires that the following files (from boldsim) are present in it's working directory.
+
+		rw_2alpha.ini
+		rw_orth.ini
+		rw.ini
+
 * There is a third set still to do - assessing robustness to design matrix or BOLD mis-specification.  This will e run2, along with any other reruns, and whatever else.
 
-* Several tablulations were carried out on the run1 data.  To see/rerun these tabulations see tabulate1.sh
-		
+* Several tabulations were carried out on the run1 data.  To see/rerun these tabulations see tabulate1.sh
+

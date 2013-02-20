@@ -24,10 +24,10 @@ plot.above <- function(csv, name, width, height){
 }
 
 
-plot.compare <- function(csv, name, width, height){
+plot.compare <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
 	dt <- read.table(csv, sep=",", header=TRUE)
 	
-	pdf(file=paste(name, ".pdf",sep=""),
+	pdf(file=paste(name, ".pdf", sep=""),
 			width=width, height=height)  
 			## Print to a pdf device...
 	
@@ -37,11 +37,13 @@ plot.compare <- function(csv, name, width, height){
 		limits <- aes(ymax = mean + se, ymin=mean - se)
 		p <- qplot(x=dataset, y=mean, data=dtf, 
 			geom="point", stat="identity") + 
-			theme_bw() + 
+			# theme_bw() + 
 			theme(axis.text.x=element_text(angle=-90,vjust=0.5)) +
 			theme(strip.text.y = element_text(angle=0)) +
 			facet_grid(dmmeta~cond) +
 			geom_errorbar(limits, width=0.25) +
+			geom_hline(aes(yintercept=marks, color="red")) +
+			ylim(ymin, ymax) +
 			ggtitle(paste("Bold: ", bold, sep=""))
 
 		print(p)  ## Add a page (of p) to the pdf() device
