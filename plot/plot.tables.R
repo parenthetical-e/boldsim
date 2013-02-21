@@ -27,6 +27,41 @@ plot.above <- function(csv, name, width=8, height=8){
 }
 
 
+plot.above.combined2 <- function(csvs, csv_labels, name, sigline=0.01, width=8, height=8){
+
+	dt <- NULL
+	for(ii in 1:length(csvs)){
+		csv <- csvs[ii]
+		lab <- csv_labels[ii]
+		
+		tempdt <- read.table(csv, sep=",", header=TRUE)
+		tempdt$dataset <- factor(rep(lab, nrow(tempdt)))
+		
+		dt <- rbind(dt, tempdt)
+	}
+	
+	pdf(file=paste(name, ".pdf",sep=""),
+			width=width, height=height)  
+			## Print to a pdf device...
+
+	p <- ggplot(dt, aes(x=dataset, y=area, fill=cond)) +
+		geom_bar(position="dodge") +
+		facet_grid(dmmeta~boldmeta) +
+		theme_bw() +
+		ylim(0, 1) +
+		ylab("Normalized area above criterion") +
+		theme(
+				axis.text.x=element_text(angle=-90, vjust=0.5),
+				strip.text.y = element_text(angle=0)) +
+		geom_hline(yintercept=sigline, color="red") +
+		ggtitle(paste("Criterion: ", sigline, sep=""))
+
+	print(p)  ## Add a page (of p) to the pdf() device
+	dev.off()
+}
+
+
+
 plot.above.combined <- function(csv, name, sigline=0.01, width=8, height=8){
 
 	dt <- read.table(csv, sep=",", header=TRUE)
