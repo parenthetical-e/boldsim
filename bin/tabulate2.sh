@@ -16,3 +16,5 @@ echo "rw_5000_learn_nobox.hdf5 t 2.6810" >> tabulate2.log
 python $BASEDIR/boldsim/bin/tabulate_above.py $DATADIR/rw_5000_learn_nobox.hdf5 t 2.6810 rw_5000_learn_nobox
 echo "rw_5000_learn_nobox.hdf5 t 4.317" >> tabulate2.log
 python $BASEDIR/boldsim/bin/tabulate_above.py $DATADIR/rw_5000_learn_nobox.hdf5 t 4.317 rw_5000_learn_nobox
+
+date >> tabulate2.log

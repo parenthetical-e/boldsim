@@ -35,14 +35,13 @@ plot.compare <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
 	for(bold in bolds){
 		dtf <- dt[dt$boldmeta == bold, ]
 		limits <- aes(ymax = mean + se, ymin=mean - se)
-		p <- qplot(x=dataset, y=mean, data=dtf, 
-			geom="point", stat="identity") + 
-			# theme_bw() + 
-			theme(axis.text.x=element_text(angle=-90,vjust=0.5)) +
+		p <- ggplot(dtf, aes(x=dataset, y=mean, fill=dataset)) + 
+			geom_bar() + 			theme_bw() + 
+			geom_hline(yintercept=marks, color="red") +
+			theme(axis.text.x=theme_blank()) +
 			theme(strip.text.y = element_text(angle=0)) +
 			facet_grid(dmmeta~cond) +
-			geom_errorbar(limits, width=0.25) +
-			geom_hline(aes(yintercept=marks, color="red")) +
+			# geom_errorbar(limits, width=0.25) +
 			ylim(ymin, ymax) +
 			ggtitle(paste("Bold: ", bold, sep=""))
 

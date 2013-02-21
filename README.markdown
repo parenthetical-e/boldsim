@@ -102,7 +102,22 @@
 		
 * To process the results of the nobox simulation I created tabulate2.sh. Then moved the created csvs to ./table and plotted these results:
 
-		boldsim commit: 459db86e536b4284fc4e30e0e3a0e252d31838a0
+		boldsim commit: 9ad0765475a28e43b13a996f7977366f18536e7f
 		plot.above("table/rw_5000_learn_nobox_t4.317.csv", "plot/above_nobox_t4.317", 8, 8)
 		plot.above("table/rw_5000_learn_nobox_t2.681.csv", "plot/above_nobox_t2.681", 8, 8)
 
+
+----
+
+* Created tabulate3.sh to combine all the noise (robustness) runs into one table to make is easier to compare changes in magnitudes.  Name: allnoise (moved to ./table)
+
+----
+
+* tabulate3.sh data was not easily analyzed using the plot.compare() routine so after a much trial and error an alternate scheme was created using colors to denote datasets in place of axis markers.  This was so good I replotted all the noise data with it.
+		
+		boldsim commit: 
+		plot.compare("table/white_t.csv", "./plot/c_white", width=10, height=5, c(2.681,4.317))
+		plot.compare("table/physio_t.csv", "./plot/c_physio", width=10, height=5, c(2.681,4.317))
+		plot.compare("table/lowfreq_t.csv", "./plot/c_lowfreq", width=10, height=5, c(2.681,4.317))
+		plot.compare("table/ar1_t.csv", "./plot/c_ar1", width=10, height=5, c(2.681,4.317))
+		plot.compare("table/allnoise_t.csv", "./plot/c_allnoise", width=10, height=5, c(2.681,4.317))
