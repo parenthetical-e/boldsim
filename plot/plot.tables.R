@@ -27,7 +27,7 @@ plot.above <- function(csv, name, width=8, height=8){
 }
 
 
-plot.above.combined <- function(csv, name, width=8, height=8){
+plot.above.combined <- function(csv, name, sigline=0.01, width=8, height=8){
 
 	dt <- read.table(csv, sep=",", header=TRUE)
 	
@@ -45,7 +45,8 @@ plot.above.combined <- function(csv, name, width=8, height=8){
 				axis.text.x=element_blank(),
 				axis.title.x=element_blank(), 
 				strip.text.y = element_text(angle=0)) +
-		geom_hline(yintercept=0.05, color="red")
+		geom_hline(yintercept=sigline, color="red") +
+		ggtitle(paste("Criterion: ", sigline, sep=""))
 
 	print(p)  ## Add a page (of p) to the pdf() device
 	dev.off()
