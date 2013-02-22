@@ -8,19 +8,22 @@ plot.above <- function(csv, name, width=8, height=8){
 			width=width, height=height)  
 			## Print to a pdf device...
 	
+	# drop the baseline cond
+	dt <- dt[dt$cond != "baseline", ]
+	
 	bolds <- unique(dt$boldmeta)
 	for(bold in bolds){
 		dtf <- dt[dt$boldmeta == bold, ]
 		p <- qplot(x=cond, y=area, fill=cond, 
-			data=dtf, geom="bar", stat="identity") + 	
+			data=dtf, geom="bar", stat="identity") +
 			theme_bw() +
 			ylim(0, 1) +
 			theme(axis.text.x=element_blank()) +
 			geom_hline(yintercept=0.05, color="red") +
-			theme(strip.text.x = element_text(angle=-90)) +
+			theme(strip.text.x=element_text(angle=-90)) +
 			facet_grid(.~dmmeta, scales="free_x") +
-			ggtitle(paste("Bold: ", bold, sep=""))
-
+			ggtitle(paste("Bold: ",bold,sep=""))
+			
 		print(p)  ## Add a page (of p) to the pdf() device
 	}
 	dev.off()
@@ -40,21 +43,32 @@ plot.above.combined2 <- function(csvs, csv_labels, name, sigline=0.01, width=8, 
 		dt <- rbind(dt, tempdt)
 	}
 	
+	# drop the baseline cond
+	dt <- dt[dt$cond != "baseline", ]
+	
+	# drop baseline_box
+	dt <- dt[dt$cond != "box", ]	
+	dt <- dt[dt$dmmeta != "baseline_box", ]
+		## Were' focusing on the model-based
+	
 	pdf(file=paste(name, ".pdf",sep=""),
 			width=width, height=height)  
 			## Print to a pdf device...
 
-	p <- ggplot(dt, aes(x=dataset, y=area, fill=cond)) +
-		geom_bar(position="dodge") +
-		facet_grid(dmmeta~boldmeta) +
+	p <- ggplot(dt, aes(x=dataset, y=area, colour=cond)) +
+		geom_point() +
+		geom_line(aes(group=cond), stat="identity") +
+		scale_colour_discrete(name = "Predictor") +
+		xlab("Simulation") +
+		facet_grid(.~boldmeta) +
 		theme_bw() +
 		ylim(0, 1) +
-		ylab("Normalized area above criterion") +
+		ylab("Normalized area") +
 		theme(
 				axis.text.x=element_text(angle=-90, vjust=0.5),
 				strip.text.y = element_text(angle=0)) +
 		geom_hline(yintercept=sigline, color="red") +
-		ggtitle(paste("Criterion: ", sigline, sep=""))
+		ggtitle(paste("Criterion: p < ", sigline, sep=""))
 
 	print(p)  ## Add a page (of p) to the pdf() device
 	dev.off()
@@ -69,6 +83,9 @@ plot.above.combined <- function(csv, name, sigline=0.01, width=8, height=8){
 	pdf(file=paste(name, ".pdf",sep=""),
 			width=width, height=height)  
 			## Print to a pdf device...
+
+	# drop the baseline cond
+	dt <- dt[dt$cond != "baseline", ]
 
 	p <- qplot(x=cond, y=area, fill=cond, 
 		data=dt, geom="bar", stat="identity") + 	
