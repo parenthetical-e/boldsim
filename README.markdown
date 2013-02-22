@@ -73,9 +73,34 @@
 		python ~/src/boldsim/bin/tabulate_compare.py t rw_5000_learn.hdf5 \
 		rw_5000_learn_white20.hdf5 white
 
+* Created tabulate3.sh to combine all the noise (robustness) runs into one table to make is easier to compare changes in magnitudes.  Name: allnoise (moved to ./table)
+
 ----
 
-* Made the following plots (in R version 2.15.1, using ggplot2 version 0.9.2.1, CentOS 5.7 (code (mostly) tested on MacOS 10.7.5, using R 9.3.4)).
+* After initial analysis all run1.sh was rerun.
+ - Differences from last run:
+  1. All noise/robust experiments have orth turned on.  This is the statistically correct way to do model-based regressions so we should use it to test noise robustness.... for these purposes we'll ignore the interpretability issues that come with orth.
+  2. Replaced 2alpha with 4alpha - want to get a more fine grained look at parameter effects.
+  3. Redid rw_4alpha.ini making it more focused than its 2alpha predecessor.  There were several superfluous design matrices.
+  4. run1.sh now runs the relevant tabulate*.sh scripts
+  5. deleted white05 -- it is not of use for the paper.
+
+# Plots for paper
+
+* NOTE: rename plots from, for example, *t2.681.pdf to *t2_681.pdf for latex compatibly.
+* NOTE: Made the following plots (in R version 2.15.1, using ggplot2 version 0.9.2.1, CentOS 5.7 (code is (mostly) tested on MacOS 10.7.5, using R 9.3.4)).
+
+* Plots for area above crit as function of MO, BM and OBM:
+
+		boldsim commit: 17c381c74f75984902036306c05f86df1d55922a
+		plot.above.combined2(c("table/rw_5000_learn_nobox_t2.681.csv", "table/rw_5000_learn_t2.681.csv", "./table/rw_5000_learn_orth_t2.681.csv"), c("MO", "BM", "OBM"), "plot/bsp_dmcompare_t2.681", sigline=0.01, width=6, height=3) 		
+
+* Need example histograms for all sims
+* Need alpha plots
+
+# Alt or old plots (saved for later reference).
+
+* First round of plots:
 
 		boldsim commit: 941a78533430c2b037087b5a19fc34de37ce459b
 		plot.compare("table/white_t.csv", "./plot/c_white", c(2.681,4.317))
@@ -83,14 +108,14 @@
 		plot.compare("table/physio_t.csv", "./plot/c_physio", c(2.681,4.317))
 		plot.compare("table/ar1_t.csv", "./plot/c_ar1",c(2.681,4.317))
 		
-		plot.above("./table/rw_5000_learn_t4.317.csv", "plot/above_learn_t4.317", 8, 8)
-		plot.above("./table/rw_5000_learn_t2.681.csv", "plot/above_learn_t2.681", 8, 8)
+		plot.above("./table/rw_5000_learn_t4.317.csv", "plot/above_learn_t4.317", 4, 4)
+		plot.above("./table/rw_5000_learn_t2.681.csv", "plot/above_learn_t2.681", 4, 4)
 		
-		plot.above("./table/rw_5000_learn_2alpha_t4.317.csv", "plot/2alpha_t4.317", 8, 8)
-		plot.above("./table/rw_5000_learn_2alpha_t2.681.csv", "plot/2alpha_t2.681", 8, 8)
+		plot.above("./table/rw_5000_learn_2alpha_t4.317.csv", "plot/above_2alpha_t4.317", 4, 4)
+		plot.above("./table/rw_5000_learn_2alpha_t2.681.csv", "plot/above_2alpha_t2.681", 4, 4)
 		
-		plot.above("table/rw_5000_learn_orth_t4.317.csv", "plot/orth_t4.317", 8, 8)
-		plot.above("table/rw_5000_learn_orth_t2.681.csv", "plot/orth_t2.681", 8, 8)
+		plot.above("table/rw_5000_learn_orth_t4.317.csv", "plot/above_orth_t4.317", 4, 4)
+		plot.above("table/rw_5000_learn_orth_t2.681.csv", "plot/above_orth_t2.681", 4, 4)
 		
 ----
 
@@ -103,21 +128,41 @@
 * To process the results of the nobox simulation I created tabulate2.sh. Then moved the created csvs to ./table and plotted these results:
 
 		boldsim commit: 9ad0765475a28e43b13a996f7977366f18536e7f
-		plot.above("table/rw_5000_learn_nobox_t4.317.csv", "plot/above_nobox_t4.317", 8, 8)
-		plot.above("table/rw_5000_learn_nobox_t2.681.csv", "plot/above_nobox_t2.681", 8, 8)
-
-
-----
-
-* Created tabulate3.sh to combine all the noise (robustness) runs into one table to make is easier to compare changes in magnitudes.  Name: allnoise (moved to ./table)
+		plot.above("table/rw_5000_learn_nobox_t4.317.csv", "plot/above_nobox_t4.317", 4, 4)
+		plot.above("table/rw_5000_learn_nobox_t2.681.csv", "plot/above_nobox_t2.681", 4, 4)
 
 ----
 
 * tabulate3.sh data was not easily analyzed using the plot.compare() routine so after a much trial and error an alternate scheme was created using colors to denote datasets in place of axis markers.  This was so good I replotted all the noise data with it.
 		
-		boldsim commit: 
+		boldsim commit: 9a86c825919f720be422a0ec3f60b1a5d34ed207
 		plot.compare("table/white_t.csv", "./plot/c_white", width=10, height=5, c(2.681,4.317))
 		plot.compare("table/physio_t.csv", "./plot/c_physio", width=10, height=5, c(2.681,4.317))
 		plot.compare("table/lowfreq_t.csv", "./plot/c_lowfreq", width=10, height=5, c(2.681,4.317))
 		plot.compare("table/ar1_t.csv", "./plot/c_ar1", width=10, height=5, c(2.681,4.317))
 		plot.compare("table/allnoise_t.csv", "./plot/c_allnoise", width=10, height=5, c(2.681,4.317))
+				
+----
+
+* Fig: model-only
+
+		boldsim commit 88551be002a7062cecb979628834c52558b959bb
+		plot.above.combined("./table/rw_5000_learn_nobox_t2.681.csv", "plot/bsp_nobox_t2.681", sigline=0.01, width=7, height=7)
+		plot.above.combined("./table/rw_5000_learn_nobox_t4.317.csv", "plot/bsp_nobox_t4.317", sigline=0.0005, width=7, height=7)
+
+* Fig: box and model
+
+		plot.above.combined("./table/rw_5000_learn_t4.317.csv", "plot/bsp_bm_t4.317", sigline=0.0005, width=7, height=7)
+		plot.above.combined("./table/rw_5000_learn_t2.681.csv", "plot/bsp_bm_t2.681", sigline=0.01, width=7, height=7)
+		
+* Fig: OBM
+		
+		plot.above.combined("./table/rw_5000_learn_orth_t2.681.csv", "plot/bsp_bmo_t2.681", sigline=0.01, width=7, height=7)
+		plot.above.combined("./table/rw_5000_learn_orth_t4.317.csv", "plot/bsp_bmo_t4.317", sigline=0.0005, width=7, height=7)
+
+----
+
+* I also created a version that combined all three design matrix runs (MO, BM and OBM) into a single plot, but I think this might be both too dense and ambiguous, i.e. which bar belongs to which design matrix, inconsistent row, DMs, etc.
+
+		boldsim commit: 29871bb40f4137a7a08948750324f93ba8e05722
+		plot.above.combined2(c("table/rw_5000_learn_nobox_t2.681.csv", "table/rw_5000_learn_t2.681.csv", "./table/rw_5000_learn_orth_t2.681.csv"), c("MO", "BM", "OBM"), "plot/bsp_dmcompare_t2.681", sigline=0.01, width=7, height=8) 

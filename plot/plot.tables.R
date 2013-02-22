@@ -43,13 +43,13 @@ plot.above.combined2 <- function(csvs, csv_labels, name, sigline=0.01, width=8, 
 		dt <- rbind(dt, tempdt)
 	}
 	
-	# drop the baseline cond
+	# Drop the baseline predictor
 	dt <- dt[dt$cond != "baseline", ]
 	
-	# drop baseline_box
+	# We're focusing on the model-based outcomes,
+	# not the binary case	
 	dt <- dt[dt$cond != "box", ]	
 	dt <- dt[dt$dmmeta != "baseline_box", ]
-		## Were' focusing on the model-based
 	
 	pdf(file=paste(name, ".pdf",sep=""),
 			width=width, height=height)  
@@ -64,8 +64,7 @@ plot.above.combined2 <- function(csvs, csv_labels, name, sigline=0.01, width=8, 
 		theme_bw() +
 		ylim(0, 1) +
 		ylab("Normalized area") +
-		theme(
-				axis.text.x=element_text(angle=-90, vjust=0.5),
+		theme(axis.text.x=element_text(angle=-90, vjust=0.5),
 				strip.text.y = element_text(angle=0)) +
 		geom_hline(yintercept=sigline, color="red") +
 		ggtitle(paste("Criterion: p < ", sigline, sep=""))
@@ -116,7 +115,7 @@ plot.compare <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
 	for(bold in bolds){
 		dtf <- dt[dt$boldmeta == bold, ]
 		limits <- aes(ymax = mean + se, ymin=mean - se)
-		p <- ggplot(dtf, aes(x=dataset, y=mean, fill=dataset)) + 
+		p <- ggplot(dtf, aes(x=dataset, y=mean/max(mean), fill=dataset)) + 
 			geom_bar() +
 			theme_bw() + 
 			geom_hline(yintercept=marks, color="red") +
@@ -131,3 +130,54 @@ plot.compare <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
 	}
 	dev.off()
 }
+
+plot.compare2 <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
+	dt <- read.table(csv, sep=",", header=TRUE)
+	
+	# drop the baseline cond
+	dt <- dt[dt$cond != "baseline", ]
+	print(str(dt))
+	
+	# Keep only when bols matches cond
+	conds <- as.character(dt$cond)
+	bolds <- as.character(dt$boldmeta)
+	mask <- conds == bolds
+	print(mask)
+	dt <- dt[mask, ]
+	print(str(dt))
+	
+	pdf(file=paste(name, ".pdf", sep=""),
+			width=width, height=height)  
+			## Print to a pdf device...
+	
+	limits <- aes(ymax = mean + se, ymin=mean - se)
+	p <- ggplot(dt, aes(x=dataset, y=mean, colour=cond)) + 
+		geom_point() +
+		geom_line(aes(group=cond)) +
+		theme_bw() + 
+		geom_hline(yintercept=marks, color="red") +
+		# theme(axis.text.x=element_blank()) +
+		theme(axis.text.x = element_text(angle=-90)) +
+		facet_grid(.~boldmeta) +
+		# geom_errorbar(limits, width=0.25) +
+		ylim(ymin, ymax)
+
+	print(p)  ## Add a page (of p) to the pdf() device
+	dev.off()
+}
+
+
+releveled.dataset <- function(csv, oldlevels, newlevels, save=TRUE){
+	require("plyr")
+	
+	dt <- read.table(csv, sep=",", header=TRUE)	
+	mapvalues(dt, from = oldlevels, to = newlevels)
+	
+	if(save){
+		write.table(dt, paste("relevds_", csv), 
+				row.names=FALSE, header=TRUE, sep=",")		
+	}
+
+	dt
+}
+
