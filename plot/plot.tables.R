@@ -167,17 +167,33 @@ plot.compare2 <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
 }
 
 
-releveled.dataset <- function(csv, oldlevels, newlevels, save=TRUE){
-	require("plyr")
+relevel.dataset <- function(csv, oldlevels, newlevels, save=TRUE){
 	
-	dt <- read.table(csv, sep=",", header=TRUE)	
-	mapvalues(dt, from = oldlevels, to = newlevels)
+	# Get the csv data
+	dt <- read.table(csv, sep=",", header=TRUE)
 	
-	if(save){
-		write.table(dt, paste("relevds_", csv), 
-				row.names=FALSE, header=TRUE, sep=",")		
+	# Extract datasets then loop,
+	# getting old and new to swap them
+	datasets <- as.character(dt$dataset)
+	print(datasets)
+	for(ii in 1:length(oldlevels)){
+		oldl <- oldlevels[ii]
+		newl <- newlevels[ii]
+		mask <- datasets == oldl
+		print(mask)
+		datasets[mask] <- newl
+	}
+	
+	# Reattach datasets
+	dt$datasets <- as.factor(datasets)
+	
+	# Write?
+	if (save){
+		print("Saving...")
+		write.table(dt, csv, row.names=FALSE, sep=",")		
 	}
 
+	#EOF
 	dt
 }
 
