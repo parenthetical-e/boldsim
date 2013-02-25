@@ -10,7 +10,7 @@
 
 * And take no arguments.  While more general run files (that take arguments) could have been created, I felt it was best that experimental files were as explicit as possible.  This comes with a code-duplication cost, but that seems worth it for the gained transparency.  As least I hope.
 
-* Much of the experiments here were initially done about a year and a half ago.  But as I have greatly altered/improved of the simfMRI code base, so the experimental runs are redone completely.  
+* Much of the experiments here were initially done about a year and a half ago.  But as I have greatly altered/improved of the simfMRI code base, so the experimental runs are redone completely.
 
  - To see the old experiments and code go back through the simfMRI git repository.
 
@@ -90,13 +90,30 @@
 * NOTE: rename plots from, for example, *t2.681.pdf to *t2_681.pdf for latex compatibly.
 * NOTE: Made the following plots (in R version 2.15.1, using ggplot2 version 0.9.2.1, CentOS 5.7 (code is (mostly) tested on MacOS 10.7.5, using R 9.3.4)).
 
+----
+* Precision:
+* Need alpha plots
+* Need example histograms for all sims
 * Plots for area above crit as function of MO, BM and OBM:
 
 		boldsim commit: 17c381c74f75984902036306c05f86df1d55922a
 		plot.above.combined2(c("table/rw_5000_learn_nobox_t2.681.csv", "table/rw_5000_learn_t2.681.csv", "./table/rw_5000_learn_orth_t2.681.csv"), c("MO", "BM", "OBM"), "plot/bsp_dmcompare_t2.681", sigline=0.01, width=6, height=3) 		
 
-* Need example histograms for all sims
-* Need alpha plots
+----
+* Robustness:
+* Dataset codes for the allnoise_t.csv were changed to something more presentable by
+- relevel.dataset() lives in boldsim/plot/plot.tables.R
+
+		# boldsim commit 20b100e6b8beb527be040f7a2dddbdd1b1da995f
+		dt <- read.table("table/allnoise_t.csv", sep=",", header=TRUE)
+		old <- levels(dt$dataset)
+		new <- c("ar1_0.2", "ar1_0.4", "ar1_0.8", "low_freq", "white", "physio")
+		dtre <- relevel.dataset("table/allnoise_t.csv", old, new, TRUE)
+			
+* Plots for noise simulations and their effect on robustness
+
+		plot.compare2("table/allnoise_t.csv", "plot/c_allnoise", c(2.681,4.317), width=3, height=6)
+
 
 # Alt or old plots (saved for later reference).
 

@@ -16,8 +16,7 @@ echo $DATADIR >> tabulate3.log
 
 echo "allnoise" >> tabulate3.log
 python $BASEDIR/boldsim/bin/tabulate_compare.py t \
-    $DATADIR/rw_5000_learn.hdf5 \
-    $DATADIR/rw_5000_learn_white20.hdf5 \
+    $DATADIR/rw_5000_learn_orth.hdf5 \
     $DATADIR/rw_5000_learn_ar1.hdf5 \
     $DATADIR/rw_5000_learn_ar1a04.hdf5 \
     $DATADIR/rw_5000_learn_ar1a08.hdf5 \

@@ -1,6 +1,6 @@
 """ For every model in the provided hdf file(s), and for the selected stat, tabulate mean and standard error for each condition in each model.  Save the result to a csv table named tablename (.csv is added automatically).
 
-Usage: python plot_rw_compare stat hdf1 hdf2 [...] tablename
+Usage: python tabulate_compare stat hdf1 hdf2 [...] tablename
 """
 import os
 import sys

@@ -30,6 +30,46 @@ plot.above <- function(csv, name, width=8, height=8){
 }
 
 
+plot.above.alpha <- function(csv, name, sigline=0.01, width=8, height=8){
+	## Needs more work
+	dt <- read.table(csv, sep=",", header=TRUE)
+	
+	pdf(file=paste(name, ".pdf",sep=""),
+			width=width, height=height)  
+			## Print to a pdf device...
+	
+	# Keep only all conds then all bold that are
+	# either value* or rpe*
+	condidx <- grep("value", as.character(dt$cond))
+	condidx <- c(condidx, grep("rpe", as.character(dt$cond)))
+	dt <- dt[condidx, ]
+	
+	boldidx <- grep("value", as.character(dt$boldmeta))
+	boldidx <- c(boldidx, grep("rpe", as.character(dt$boldmeta)))
+	dt <- dt[boldidx, ]
+	
+	pdf(file=paste(name, ".pdf",sep=""),
+			width=width, height=height)  
+			## Print to a pdf device...
+	
+	p <- ggplot(dt, aes(x=cond, y=area)) +
+		geom_bar(stat="identity") +
+		# geom_line(aes(group=cond), stat="identity") +
+		xlab("Predictor") +
+		facet_grid(.~boldmeta) +
+		theme_bw() +
+		ylim(0, 1) +
+		ylab("Normalized area") +
+		theme(axis.text.x=element_text(angle=-90, vjust=0.5),
+				strip.text.y = element_text(angle=0)) +
+		geom_hline(yintercept=sigline, color="red") +
+		ggtitle(paste("Criterion: p < ", sigline, sep=""))
+
+	print(p)  ## Add a page (of p) to the pdf() device
+	dev.off()
+}
+
+
 plot.above.combined2 <- function(csvs, csv_labels, name, sigline=0.01, width=8, height=8){
 
 	dt <- NULL
@@ -132,6 +172,8 @@ plot.compare <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
 }
 
 plot.compare2 <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
+	## TODO find a way to sort conds so that they go in order of their largest to least avg value
+	
 	dt <- read.table(csv, sep=",", header=TRUE)
 	
 	# drop the baseline cond
@@ -142,25 +184,27 @@ plot.compare2 <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
 	conds <- as.character(dt$cond)
 	bolds <- as.character(dt$boldmeta)
 	mask <- conds == bolds
-	print(mask)
 	dt <- dt[mask, ]
-	print(str(dt))
 	
 	pdf(file=paste(name, ".pdf", sep=""),
 			width=width, height=height)  
 			## Print to a pdf device...
+			
+	# dt$dataset <- factor(dt$dataset, levels=rev(levels(dt$dataset)))
 	
 	limits <- aes(ymax = mean + se, ymin=mean - se)
-	p <- ggplot(dt, aes(x=dataset, y=mean, colour=cond)) + 
-		geom_point() +
-		geom_line(aes(group=cond)) +
+	p <- ggplot(dt, aes(x=dataset, y=mean, fill=cond)) +
+		geom_bar(stat="identity") +
+		scale_fill_discrete(name = "Predictor") +
 		theme_bw() + 
 		geom_hline(yintercept=marks, color="red") +
 		# theme(axis.text.x=element_blank()) +
-		theme(axis.text.x = element_text(angle=-90)) +
-		facet_grid(.~boldmeta) +
-		# geom_errorbar(limits, width=0.25) +
-		ylim(ymin, ymax)
+		theme(axis.text.x = element_text(angle=-90,vjust=0.5)) +
+		facet_grid(boldmeta~.) +
+		geom_errorbar(limits, width=0.25) +
+		ylim(ymin, ymax) +
+		ylab("Mean t-value") +
+		xlab("Simulation") 
 
 	print(p)  ## Add a page (of p) to the pdf() device
 	dev.off()
@@ -175,7 +219,6 @@ relevel.dataset <- function(csv, oldlevels, newlevels, save=TRUE){
 	# Extract datasets then loop,
 	# getting old and new to swap them
 	datasets <- as.character(dt$dataset)
-	print(datasets)
 	for(ii in 1:length(oldlevels)){
 		oldl <- oldlevels[ii]
 		newl <- newlevels[ii]
@@ -185,7 +228,8 @@ relevel.dataset <- function(csv, oldlevels, newlevels, save=TRUE){
 	}
 	
 	# Reattach datasets
-	dt$datasets <- as.factor(datasets)
+	print(newlevels)
+	dt$dataset <- factor(datasets, levels=newlevels)
 	
 	# Write?
 	if (save){
