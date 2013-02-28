@@ -100,19 +100,18 @@ plot.above.combined2 <- function(csvs, csv_labels, name, sigline=0.01, width=8, 
 		geom_line(aes(group=cond), stat="identity") +
 		scale_colour_discrete(name = "Predictor") +
 		xlab("Simulation") +
-		facet_grid(.~boldmeta) +
+		facet_grid(boldmeta~.) +
 		theme_bw() +
 		ylim(0, 1) +
 		ylab("Normalized area") +
 		theme(axis.text.x=element_text(angle=-90, vjust=0.5),
-				strip.text.y = element_text(angle=0)) +
+				strip.text.y = element_text(angle=-90)) +
 		geom_hline(yintercept=sigline, color="red") +
 		ggtitle(paste("Criterion: p < ", sigline, sep=""))
 
 	print(p)  ## Add a page (of p) to the pdf() device
 	dev.off()
 }
-
 
 
 plot.above.combined <- function(csv, name, sigline=0.01, width=8, height=8){
@@ -141,103 +140,5 @@ plot.above.combined <- function(csv, name, sigline=0.01, width=8, height=8){
 
 	print(p)  ## Add a page (of p) to the pdf() device
 	dev.off()
-}
-
-
-plot.compare <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
-	dt <- read.table(csv, sep=",", header=TRUE)
-	
-	pdf(file=paste(name, ".pdf", sep=""),
-			width=width, height=height)  
-			## Print to a pdf device...
-	
-	bolds <- unique(dt$boldmeta)
-	for(bold in bolds){
-		dtf <- dt[dt$boldmeta == bold, ]
-		limits <- aes(ymax = mean + se, ymin=mean - se)
-		p <- ggplot(dtf, aes(x=dataset, y=mean/max(mean), fill=dataset)) + 
-			geom_bar() +
-			theme_bw() + 
-			geom_hline(yintercept=marks, color="red") +
-			theme(axis.text.x=theme_blank()) +
-			theme(strip.text.y = element_text(angle=0)) +
-			facet_grid(dmmeta~cond) +
-			# geom_errorbar(limits, width=0.25) +
-			ylim(ymin, ymax) +
-			ggtitle(paste("Bold: ", bold, sep=""))
-
-		print(p)  ## Add a page (of p) to the pdf() device
-	}
-	dev.off()
-}
-
-plot.compare2 <- function(csv, name, marks, ymin=-6, ymax=8, width=8, height=8){
-	## TODO find a way to sort conds so that they go in order of their largest to least avg value
-	
-	dt <- read.table(csv, sep=",", header=TRUE)
-	
-	# drop the baseline cond
-	dt <- dt[dt$cond != "baseline", ]
-	print(str(dt))
-	
-	# Keep only when bols matches cond
-	conds <- as.character(dt$cond)
-	bolds <- as.character(dt$boldmeta)
-	mask <- conds == bolds
-	dt <- dt[mask, ]
-	
-	pdf(file=paste(name, ".pdf", sep=""),
-			width=width, height=height)  
-			## Print to a pdf device...
-			
-	# dt$dataset <- factor(dt$dataset, levels=rev(levels(dt$dataset)))
-	
-	limits <- aes(ymax = mean + se, ymin=mean - se)
-	p <- ggplot(dt, aes(x=dataset, y=mean, fill=cond)) +
-		geom_bar(stat="identity") +
-		scale_fill_discrete(name = "Predictor") +
-		theme_bw() + 
-		geom_hline(yintercept=marks, color="red") +
-		# theme(axis.text.x=element_blank()) +
-		theme(axis.text.x = element_text(angle=-90,vjust=0.5)) +
-		facet_grid(boldmeta~.) +
-		geom_errorbar(limits, width=0.25) +
-		ylim(ymin, ymax) +
-		ylab("Mean t-value") +
-		xlab("Simulation") 
-
-	print(p)  ## Add a page (of p) to the pdf() device
-	dev.off()
-}
-
-
-relevel.dataset <- function(csv, oldlevels, newlevels, save=TRUE){
-	
-	# Get the csv data
-	dt <- read.table(csv, sep=",", header=TRUE)
-	
-	# Extract datasets then loop,
-	# getting old and new to swap them
-	datasets <- as.character(dt$dataset)
-	for(ii in 1:length(oldlevels)){
-		oldl <- oldlevels[ii]
-		newl <- newlevels[ii]
-		mask <- datasets == oldl
-		print(mask)
-		datasets[mask] <- newl
-	}
-	
-	# Reattach datasets
-	print(newlevels)
-	dt$dataset <- factor(datasets, levels=newlevels)
-	
-	# Write?
-	if (save){
-		print("Saving...")
-		write.table(dt, csv, row.names=FALSE, sep=",")		
-	}
-
-	#EOF
-	dt
 }
 

@@ -24,17 +24,20 @@ def main(hdf, stat, name):
     csvw = csv.writer(f)
     
     # Make a header for the table
-    header = [stat, "count", "cond", "model"]
+    header = [stat, "count", "cond", "boldmeta", "model"]
     csvw.writerow(header)
     
     # Make a list of the models 
     # to tabulate and get going...
     models = get_model_names(hdf)
     for mod in models:
+        meta = get_model_meta(hdf, mod)
         hist_list = create_hist(hdf, mod, stat)
         for hist in hist_list:
             cond = hist.name
-            [csvw.writerow([k, v, cond, mod]) for k, v in hist.h.items()]
+            boldmeta = "_".join([str(b) for b in meta["bold"]])
+            [csvw.writerow([k, v, cond, boldmeta, mod]) for 
+                    k, v in hist.h.items()]
 
     f.close()
 
