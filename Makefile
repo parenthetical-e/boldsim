@@ -42,11 +42,10 @@ ardata:
 	mv ./data/*.pdf ./plot/
 
 
-tables: precisiontables noisetables corrtables
-	mv *.csv table/
+# Create the tables
+tables: precisiontables noisetables nohrftable tautables
 
 precisiontables: data
-# Create the tables
 	python ./bin/tabulate_above.py ./data/rw_5000_learn.hdf5 t 2.6810 rw_5000_learn
 	python ./bin/tabulate_above.py ./data/rw_5000_learn.hdf5 t 4.317 rw_5000_learn
 	python ./bin/tabulate_above.py ./data/rw_5000_random.hdf5 t 2.6810 rw_5000_random
@@ -59,14 +58,13 @@ precisiontables: data
 	python ./bin/tabulate_above.py ./data/rw_5000_learn_nobox.hdf5 t 4.317 rw_5000_learn_nobox
 	python ./bin/tabulate_hist.py t ./data/rw_5000_learn_orth.hdf5 orth
 	mv *.csv table/
-
-corrtables: data
-	python ./bin/tabulate_model_corr.py ./data/rw_5000_learn_nobox.hdf5 nobox_model_corr
-	python ./bin/tabulate_model_corr.py ./data/rw_5000_learn_nobox_nohrf.hdf5 nobox_nohrf_model_corr
+	
+nohrftable: data
+	python ./bin/tabulate_above.py ./data/rw_5000_learn_nobox_nohrf.hdf5 t 2.6810 rw_5000_learn_nobox_nohrf
+	python ./bin/tabulate_above.py ./data/rw_5000_learn_nobox_nohrf.hdf5 t 4.317 rw_5000_learn_nobox_nohrf
 	mv *.csv table/
 
 noisetables: data
-# Create the tables
 	python ./bin/tabulate_compare.py t \
 	    ./data/rw_5000_learn_orth.hdf5 \
 	    ./data/rw_5000_learn_ar1.hdf5 \
@@ -75,6 +73,11 @@ noisetables: data
 	    ./data/rw_5000_learn_physio.hdf5 \
 	    ./data/rw_5000_learn_lowfreq.hdf5 \
 	    allnoise
+	mv *.csv table/
+
+tautables:
+	python bin/tabulate_tau.py data/rw_5000_learn_nobox_nohrf.hdf5 nobox_nohrf_tau
+	python bin/tabulate_tau.py data/rw_5000_learn_nobox.hdf5 nobox_tau
 	mv *.csv table/
 
 
