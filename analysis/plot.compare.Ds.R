@@ -39,7 +39,7 @@ plot.compare2.D <- function(csv, name, ymin=-6, ymax=8, width=8, height=8){
 	pdf(file=paste(name, ".pdf", sep=""),
 			width=width, height=height)  
 			## Print to a pdf device...
-				
+	
 	p <- ggplot(dt, aes(x=dataset, y=D, fill=cond)) +
 		geom_bar(stat="identity") +
 		scale_fill_discrete(name = "Predictor") +

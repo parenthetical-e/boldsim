@@ -30,13 +30,16 @@ plot.above <- function(csv, name, width=8, height=8){
 }
 
 
-plot.above.alpha <- function(csv, name, sigline=0.01, width=8, height=8){
+plot.above.4alpha <- function(csv, name, sigline=0.01, width=8, height=8){
 	## Needs more work
 	dt <- read.table(csv, sep=",", header=TRUE)
 	
 	pdf(file=paste(name, ".pdf",sep=""),
 			width=width, height=height)  
 			## Print to a pdf device...
+	
+	# drop the baseline cond
+	dt <- dt[dt$cond != "baseline", ]
 	
 	# Keep only all conds then all bold that are
 	# either value* or rpe*
@@ -48,20 +51,39 @@ plot.above.alpha <- function(csv, name, sigline=0.01, width=8, height=8){
 	boldidx <- c(boldidx, grep("rpe", as.character(dt$boldmeta)))
 	dt <- dt[boldidx, ]
 	
-	pdf(file=paste(name, ".pdf",sep=""),
-			width=width, height=height)  
-			## Print to a pdf device...
+	# Create a rpe/value factor
+	modelkind <- rep("value", nrow(dt))
+	modelkind[grep("rpe", as.character(dt$cond))] <- "rpe"
+	dt$modelkind <- factor(modelkind)
 	
-	p <- ggplot(dt, aes(x=cond, y=area)) +
-		geom_bar(stat="identity") +
-		# geom_line(aes(group=cond), stat="identity") +
-		xlab("Predictor") +
-		facet_grid(.~boldmeta) +
+	# Rename the boldmeta
+	new_name <- c(
+		"rpe0"="rpe_a0.1", "rpe1"="rpe_a0.3", "rpe2"="rpe_a0.6", 
+		"rpe3"="rpe_a1", 
+		"value0"="value_a0.1", "value1"="value_a0.3", "value2"="value_a0.6",
+		"value3"="value_a1")
+	newbolds <- rep(0, nrow(dt))
+	newconds <- rep(0, nrow(dt))
+	for(ii in 1:nrow(dt)){
+		newb <- as.character(dt$boldmeta[ii])
+		newbolds[ii] <- new_name[[newb]]
+		
+		newc <- as.character(dt$cond[ii])
+		newconds[ii] <- new_name[[newc]]
+	}
+	dt$newbolds <- factor(newbolds)
+	dt$newconds <- factor(newconds)
+	
+	p <- ggplot(dt, aes(x=newbolds, y=area, colour=newconds)) +
+		geom_point() +
+		geom_line(aes(group=newconds)) +
+		xlab("Bold") +
+		facet_grid(.~modelkind, scales = "free_x") +
+		scale_colour_brewer(palette="BrBG", name = "Predictor") +
 		theme_bw() +
 		ylim(0, 1) +
 		ylab("Normalized area") +
-		theme(axis.text.x=element_text(angle=-90, vjust=0.5),
-				strip.text.y = element_text(angle=0)) +
+		theme(axis.text.x=element_text(angle=-90, vjust=0.5)) +
 		geom_hline(yintercept=sigline, color="red") +
 		ggtitle(paste("Criterion: p < ", sigline, sep=""))
 
