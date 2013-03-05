@@ -1,12 +1,15 @@
-""" Get the pairwise correlations (Kendall's tau) between each design matrix column in each model for all simulations in the hdf 
+""" Get the pairwise correlations (Pearson's r, Spearman's rho and Kendall's 
+tau) between each design matrix column and the BOLD signal in each model for 
+all simulations in the hdf 
 
-Usage: tabulate_tau hdf tablename"""
+
+Usage: tabulate_corr hdf tablename"""
 import os
 import sys
 import csv
 import numpy as np
 from itertools import combinations
-from scipy.stats import kendalltau
+from scipy.stats import kendalltau, pearsonr, spearmanr
 from simfMRI.io import read_hdf, get_model_names, get_model_meta
 
 
@@ -15,7 +18,9 @@ def main(hdf, name):
     csvw = csv.writer(f)
     
     # A header for the table
-    head = ["tau", "p",
+    head = ["tau", "p_tau",
+            "r", "p_r",
+            "rho", "p_rho",
             "cond",
             "boldmeta", 
             "model"]
@@ -47,11 +52,15 @@ def main(hdf, name):
             
             # And calc the corr between 
             # the two 1d arrays
-            tau, p = kendalltau(bold, x1)
+            tau, p_tau = kendalltau(bold, x1)
+            r, p_r = pearsonr(bold, x1)
+            rho, p_rho = spearmanr(bold, x1)
             
             # then write it all out.
             csvw.writerow([
-                    tau, p, 
+                    tau, p_tau,
+                    r, p_r,
+                    rho, p_rho,
                     x1name,
                     boldmeta, 
                     model])

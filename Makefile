@@ -1,9 +1,11 @@
 # ...Needed to get R to work on calipso
 SHELL=/bin/bash -O expand_aliases
 
+# ----
 # A Makefile for 'A precise problem with model-based fMRI?'
 all: data tables plots
 
+# ----
 # Generate the data - goes in ./data automatically
 data: dataprep basicdata basicvardata ardata noisedata alphadata
 
@@ -11,6 +13,7 @@ dataprep:
 # Setup dirs
 	mkdir ./data
 	mkdir ./plot
+	mkdir ./plot/qc
 	mkdir ./table
 	
 basicdata: 
@@ -42,6 +45,7 @@ ardata:
 	mv ./data/*.pdf ./plot/
 
 
+# ----
 # Create the tables
 tables: precisiontables noisetables nohrftable tautables
 
@@ -75,14 +79,33 @@ noisetables: data
 	    allnoise
 	mv *.csv table/
 
-tautables:
+tautables: data
 	python bin/tabulate_tau.py data/rw_5000_learn_nobox_nohrf.hdf5 nobox_nohrf_tau
 	python bin/tabulate_tau.py data/rw_5000_learn_nobox.hdf5 nobox_tau
+	
+	python bin/tabulate_corr.py data/rw_5000_learn_nobox_nohrf.hdf5 nobox_nohrf_corr
+	python bin/tabulate_corr.py data/rw_5000_learn_nobox.hdf5 nobox_corr
+	
+	python bin/tabulate_dmcorr.py data/rw_5000_learn_nobox_nohrf.hdf5 nobox_nohrf_dmcorr
+	python bin/tabulate_dmcorr.py data/rw_5000_learn_nobox.hdf5 nobox_dmcorr
+	
+	python bin/tabulate_dmhist.py data/rw_5000_learn_nobox_nohrf.hdf5 nobox_nohrf_dmhist
+	python bin/tabulate_dmhist.py data/rw_5000_learn_nobox.hdf5 nobox_dmhist
+	
 	mv *.csv table/
 
+# ----
+# Make plots
+plots: qcplots pubplots
 
-plots: 
-	R CMD BATCH ./analysis/plots.R
+# Publication plots
+pubplots:
+	R CMD BATCH ./analysis/pubplots.R
+
+# QC and developments plots
+qcplots:
+	python ./analysis/qcplots.py
+	mv *.pdf /plots/qc
 
 
 clean:
