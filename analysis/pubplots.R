@@ -101,7 +101,8 @@ plot.dmhist_hrf("table/nobox_dmhist.csv",
 # so change the allnoise_t tabulate call with great care
 dt <- read.table("table/allnoise_t.csv", sep=",", header=TRUE)
 old <- levels(dt$dataset)
-new <- c("ar1_0.2", "ar1_0.4", "ar1_0.8", "low_freq", "white", "physio")
+print(old)
+new <- c("white", "ar1_0.2", "ar1_0.4", "ar1_0.8", "low_freq", "physio")
 print(old)
 print(new)
 

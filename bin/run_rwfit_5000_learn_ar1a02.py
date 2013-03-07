@@ -29,7 +29,7 @@ class RunRWAR1(Run):
         self.nrun = 5000
         self.TR = 2
         self.ISI = 2
-        self.model_conf = "rw_orth.ini"
+        self.model_conf = "rw_nobox.ini"
         self.savedir = "data"
         self.ntrial = 60
         

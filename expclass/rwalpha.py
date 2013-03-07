@@ -24,14 +24,15 @@ class RWalpha(Exp):
         
         self.prng = process_prng(prng)
         
+        
         # Simulate a learning task and acc.
         ncond = 1
         trials, acc, p, self.prng = simBehave.behave.learn(
                 ncond, n, 3, True, self.prng)
-        
+                
         # And hand the results off of self
         self.trials = np.array(trials)
-        self.durations = np.array([1, ] * n)
+        self.durations = np.array([1, ] * len(self.trials))
         
         # Or add them to the data attr
         self.data["ncond"] = ncond

@@ -28,5 +28,5 @@ if __name__ == "__main__":
         "white20" : "./data/rw_5000_learn_white20.hdf5",
         "random" : "./data/rw_5000_random.hdf5"}
     
-    random_tc(50, toplot)
+    random_tc(5, toplot)
     

@@ -44,6 +44,7 @@ plot.dmhist_hrf <- function(csv, csv_nohrf, name, width, height){
 	# Drop the baseline cond0s and box bold signals
 	combined <- combined[combined$cond != "box", ]
 	combined <- combined[combined$cond != "acc", ]
+	# combined <- combined[combined$cond != "p", ]
 	
 	# Open pdf device
 	pdf(file=paste(name, ".pdf", sep=""), width=width, height=height)  
